@@ -28,7 +28,7 @@ jobs:
           username: azureuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/frontend
+            cd /home/azureuser/frontend
             git pull origin main
             npm install
             npm run build
