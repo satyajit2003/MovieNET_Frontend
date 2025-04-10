@@ -28,10 +28,11 @@ jobs:
           username: azureuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            sudo systemctl stop apache2
             sudo cd /home/azureuser/frontend
             sudo git pull origin main
             sudo npm install
             sudo npm run build
             sudo rm -rf /var/www/html/*
             sudo cp -r dist/* /var/www/html/
-            sudo systemctl restart apache2
+            sudo systemctl start apache2
