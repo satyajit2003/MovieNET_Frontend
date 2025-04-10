@@ -54,7 +54,7 @@ const HomePage = () => {
           LinkComponent={Link}
           to="/movies"
         >
-          View All Movies..
+          View All Movies
         </Button>
       </Box>
     </Box>
