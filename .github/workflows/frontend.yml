@@ -1,0 +1,27 @@
+name: Deploy Frontend to All VMs
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ip: [ "${{ secrets.FRONTEND_VM_0 }}", "${{ secrets.FRONTEND_VM_1 }}" ]
+
+    steps:
+      - name: SSH and Deploy to Frontend ${{ matrix.ip }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ matrix.ip }}
+          username: azureuser
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/frontend
+            git pull origin main
+            npm install
+            npm run build
+            rm -rf /var/www/html/*
+            cp -r dist/* /var/www/html/
