@@ -9,13 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ip: [ "${{ secrets.FRONTEND_VM_0 }}", "${{ secrets.FRONTEND_VM_1 }}" ]
+        vm: [frontend_vm_0, frontend_vm_1]
 
     steps:
-      - name: SSH and Deploy to Frontend ${{ matrix.ip }}
+      - name: Set IP from Secret
+        id: set-ip
+        run: |
+          if [ "${{ matrix.vm }}" == "frontend_vm_0" ]; then
+            echo "IP=${{ secrets.FRONTEND_VM_0 }}" >> $GITHUB_OUTPUT
+          else
+            echo "IP=${{ secrets.FRONTEND_VM_1 }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: SSH and Deploy to ${{ matrix.vm }}
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ matrix.ip }}
+          host: ${{ steps.set-ip.outputs.IP }}
           username: azureuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
@@ -25,3 +34,4 @@ jobs:
             npm run build
             rm -rf /var/www/html/*
             cp -r dist/* /var/www/html/
+            systemctl restart apache2
