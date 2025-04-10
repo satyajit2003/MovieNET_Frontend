@@ -31,6 +31,7 @@ jobs:
             sudo systemctl stop apache2
             cd /home/azureuser/frontend
             git pull origin main
+            sudo sed -i "s|localhost:5000|${{ secrets.BACKEND_VM }}:5000|g" src/main.jsx
             npm install
             npm run build
             sudo rm -rf /var/www/html/*
