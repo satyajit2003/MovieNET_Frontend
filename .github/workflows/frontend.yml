@@ -34,6 +34,4 @@ jobs:
             sudo sed -i "s|localhost:5000|${{ secrets.BACKEND_VM }}:5000|g" src/main.jsx
             npm install
             npm run build
-            sudo rm -rf /var/www/html/*
-            sudo cp -r dist/* /var/www/html/
             sudo systemctl start apache2
