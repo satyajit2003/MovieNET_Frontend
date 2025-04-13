@@ -29,9 +29,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sudo systemctl stop apache2
+
             cd /home/azureuser/frontend
+            sudo chown -R azureuser:azureuser /home/azureuser/frontend
             git pull origin main
             sudo sed -i "s|localhost:5000|${{ secrets.BACKEND_VM }}:5000|g" src/main.jsx
             npm install
             npm run build
+
+            sudo chown -R www-data:www-data /home/azureuser/frontend/dist
+            sudo chmod -R 755 /home/azureuser/frontend/dist
             sudo systemctl start apache2
