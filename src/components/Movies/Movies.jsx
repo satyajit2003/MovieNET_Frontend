@@ -21,7 +21,7 @@ const Movies = () => {
         color="white"
         textAlign={"center"}
       >
-        ||--All Movies--||
+        All Movies
       </Typography>
       <Box
         width={"100%"}
